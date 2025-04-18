@@ -1,61 +1,47 @@
 "use client"
 
-import { useEffect, useState, useRef } from "react"
+import { useEffect, useState } from "react"
 import { useInView } from "../hooks/useInView"
 
 export function AnimatedSection({ children, delay = 0, direction = "up", className = "" }) {
-  const [ref, isInView] = useInView()
+  const [ref, isInView] = useInView({ threshold: 0.1, triggerOnce: false })
   const [hasAnimated, setHasAnimated] = useState(false)
-  const [style, setStyle] = useState({
-    opacity: 0,
-    transform: getInitialTransform(direction),
-    transition: `opacity 0.6s ease, transform 0.6s ease`,
-  })
 
-  function getInitialTransform(dir) {
-    switch (dir) {
+  useEffect(() => {
+    // Update animation state based on visibility
+    setHasAnimated(isInView)
+  }, [isInView])
+
+  const getDirectionClass = () => {
+    switch (direction) {
       case "up":
-        return "translateY(20px)"
+        return "transform translate-y-8"
       case "down":
-        return "translateY(-20px)"
+        return "transform -translate-y-8"
       case "left":
-        return "translateX(20px)"
+        return "transform translate-x-8"
       case "right":
-        return "translateX(-20px)"
+        return "transform -translate-x-8"
       default:
-        return "translateY(20px)"
+        return "transform translate-y-8"
     }
   }
 
-  useEffect(() => {
-    let timeoutId = null
-
-    if (isInView && !hasAnimated) {
-      timeoutId = setTimeout(() => {
-        setStyle({
-          opacity: 1,
-          transform: "translate(0, 0)",
-          transition: `opacity 0.6s ease, transform 0.6s ease`,
-        })
-        setHasAnimated(true)
-      }, delay * 1000)
-    }
-
-    return () => {
-      if (timeoutId) clearTimeout(timeoutId)
-    }
-  }, [isInView, hasAnimated, delay])
-
-  const elementRef = useRef(null)
-
-  // Combine the refs
-  const setRefs = (element) => {
-    ref.current = element
-    elementRef.current = element
+  const getDelayClass = () => {
+    const delayMs = delay * 1000
+    if (delayMs <= 100) return "delay-100"
+    if (delayMs <= 200) return "delay-200"
+    if (delayMs <= 300) return "delay-300"
+    return "delay-400"
   }
 
   return (
-    <div ref={setRefs} style={style} className={className}>
+    <div
+      ref={ref}
+      className={`transition-all duration-700 ease-out ${getDelayClass()} ${
+        hasAnimated ? "opacity-100 transform-none" : `opacity-0 ${getDirectionClass()}`
+      } ${className}`}
+    >
       {children}
     </div>
   )
