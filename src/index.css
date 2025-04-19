@@ -94,9 +94,10 @@ textarea {
   border-color: var(--primary-color);
 }
 
+/* CSS-only marble effect */
 .marble-bg {
-  background-color: #800020; /* Fallback if image doesn't load */
   position: relative;
+  background: linear-gradient(135deg, #800020, #5a0014);
   overflow: hidden;
 }
 
@@ -107,11 +108,13 @@ textarea {
   left: 0;
   right: 0;
   bottom: 0;
-  
-  background-size: cover;
-  background-position: center;
-  opacity: 0.3; /* Let more of the marble texture show through */
-  mix-blend-mode: multiply;
+  background-image: radial-gradient(circle at 10% 20%, rgba(255, 255, 255, 0.03) 1%, transparent 2%),
+    radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.02) 1%, transparent 2%),
+    radial-gradient(circle at 50% 60%, rgba(255, 255, 255, 0.03) 1%, transparent 2%),
+    radial-gradient(circle at 70% 40%, rgba(255, 255, 255, 0.02) 1%, transparent 2%),
+    radial-gradient(circle at 90% 80%, rgba(255, 255, 255, 0.03) 1%, transparent 2%);
+  background-size: 200% 200%;
+  opacity: 0.8;
   z-index: 1;
 }
 
@@ -122,7 +125,13 @@ textarea {
   left: 0;
   right: 0;
   bottom: 0;
-  background: linear-gradient(135deg, rgba(128, 0, 32, 0.95), rgba(90, 0, 20, 0.9)); /* Rich gradient */
+  background-image: linear-gradient(45deg, rgba(0, 0, 0, 0.05) 25%, transparent 25%),
+    linear-gradient(-45deg, rgba(0, 0, 0, 0.05) 25%, transparent 25%),
+    linear-gradient(45deg, transparent 75%, rgba(0, 0, 0, 0.05) 75%),
+    linear-gradient(-45deg, transparent 75%, rgba(0, 0, 0, 0.05) 75%);
+  background-size: 100px 100px;
+  background-position: 0 0, 0 50px, 50px -50px, -50px 0px;
+  opacity: 0.1;
   z-index: 2;
 }
 
